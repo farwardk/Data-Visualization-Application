@@ -117,7 +117,7 @@ if uploaded_file is not None:
         with colhist: 
             hist_col = st.selectbox("Select column for histogram", numeric_columns) 
         with colbin:
-            bin = st.selectbox('Select number of bins for histogram', range(10,100,10))
+            bin = st.selectbox('Select number of bins for histogram', range(10,110,10))
          
         fig, ax = plt.subplots() 
         sns.histplot(df[hist_col].dropna(), bins=bin, kde=True, ax=ax) 
