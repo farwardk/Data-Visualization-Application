@@ -2,7 +2,6 @@
 # just your imports
 import streamlit as st 
 import pandas as pd 
-import subprocess
 import matplotlib.pyplot as plt 
 import seaborn as sns 
 #from scipy.stats import zscore
