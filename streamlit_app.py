@@ -3,13 +3,7 @@
 import streamlit as st 
 import pandas as pd 
 import subprocess
-def install_package(matplotlib):
-
-    subprocess.run(["pip", "install", matplotlib])
 import matplotlib.pyplot as plt 
-def install_package(seaborn):
-
-    subprocess.run(["pip", "install", seaborn]
 import seaborn as sns 
 #from scipy.stats import zscore
 import numpy as np
