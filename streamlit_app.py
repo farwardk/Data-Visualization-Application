@@ -102,7 +102,7 @@ if uploaded_file is not None:
         st.dataframe(df.duplicated().value_counts(dropna=False))
 
     #filter for a value
-    st.write('### Filter for a value in a selected feature')
+    st.write('### Filter for Value in Selected Feature')
     col = st.selectbox('Select feature', df.columns)
     df_null = df[df[col].isnull()]
     value = st.selectbox('Select value', df[col].value_counts(dropna=False).sort_index(ascending=False).index.tolist())
