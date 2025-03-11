@@ -7,6 +7,31 @@ import seaborn as sns
 # from scipy.stats import zscore
 import numpy as np
  
+# Style config
+st.markdown(
+    f"""
+    <style>
+    body {{
+        background-color: #e2e1dc;
+        color: #000000;
+        font-family: "Serif";
+    }}
+    .stApp {{
+        background-color: #e2e1dc;
+    }}
+    .stButton>button {{
+        background-color: #f38126;
+        color: white;
+        font-family: "Serif";
+    }}
+    .stSidebar {{
+        background-color: #bcd6f5;
+    }}
+    </style>
+    """,
+    unsafe_allow_html=True
+)
+
 # Streamlit App Title 
 st.title("Simple Data Visualization App") 
  
