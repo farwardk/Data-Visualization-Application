@@ -4,7 +4,7 @@ import streamlit as st
 import pandas as pd 
 import matplotlib.pyplot as plt 
 import seaborn as sns 
-#from scipy.stats import zscore
+# from scipy.stats import zscore
 import numpy as np
  
 # Streamlit App Title 
@@ -24,6 +24,14 @@ if uploaded_file is not None:
     # Show the first few rows 
     st.write("### Preview of the Data") 
     st.dataframe(df.head()) 
+
+    # Show short summary statistics 
+    st.write("### Short Summary of Statistics") 
+    st.write(df.describe())
+
+    # Show  Full summary statistics 
+    st.write("### Full Summary of Statistics") 
+    st.write(df.describe(include='all'))
 
     # Show shape 
     st.write("### Shape of the Data") 
@@ -48,19 +56,11 @@ if uploaded_file is not None:
     
     st.write("##### Feature Data Type Counts")
     st.dataframe(df.dtypes.value_counts())
-
-    # Show short summary statistics 
-    st.write("### Short Summary of Statistics") 
-    st.write(df.describe())
-
-    # Show  Full summary statistics 
-    st.write("### Full Summary of Statistics") 
-    st.write(df.describe(include='all'))
     
     "______"
 
     st.write("# **Data Values**") 
-    left, right = st.columns(2)
+    left, right= st.columns(2)
     with right:
         #Show Null values
         st.write('### Null Values')
@@ -70,14 +70,30 @@ if uploaded_file is not None:
         st.write("### Feature value counts") 
         columns = st.selectbox("Select X-axis column", df.columns)
         st.dataframe(df[columns].value_counts(ascending=False, dropna=False))  
+    with right:
+        #Show Number of duplicate Rows
+        st.write('### Duplicate Rows')
+        st.write('Number of Duplicates signfied by checked box.')
+        st.dataframe(df.duplicated().value_counts(dropna=False))
+
+    #filter for a value
+    st.write('### Filter for a value in a selected feature')
+    col = st.selectbox('Select feature', df.columns)
+    df_null = df[df[col].isnull()]
+    value = st.selectbox('Select value', df[col].value_counts(dropna=False).sort_index(ascending=False).index.tolist())
+    if pd.isnull(value):
+        st.dataframe(df_null)
+    else:
+        st.dataframe(df[df[col] == value])
     
+
     "______"
 
     st.write("# **Data Visualization**") 
 
     # Select columns for visualization 
     numeric_columns = df.select_dtypes(include=["number"]).columns.tolist() 
-    number_df = df.select_dtypes(include=["number"])
+    number_df = df.select_dtypes(include=["number"]).dropna()
 
     if len(numeric_columns) == 0: 
         st.warning("No numeric columns found in the dataset.")
@@ -88,6 +104,7 @@ if uploaded_file is not None:
 
         fig,ax = plt.subplots()
         sns.boxplot(df[boxplot_col].dropna(),ax=ax)
+        st.write(f'##### Boxplot of {boxplot_col}')
         st.pyplot(fig)
 
         st.write('##### *Percentiles of Boxplot*')
@@ -121,6 +138,7 @@ if uploaded_file is not None:
          
         fig, ax = plt.subplots() 
         sns.histplot(df[hist_col].dropna(), bins=bin, kde=True, ax=ax) 
+        st.write(f'##### Histogram of {hist_col}')
         st.pyplot(fig) 
 
         "_________"
@@ -135,6 +153,7 @@ if uploaded_file is not None:
  
         fig, ax = plt.subplots() 
         sns.scatterplot(data=df.dropna(), x=x_col, y=y_col, ax=ax) 
+        st.write(f'##### Scatter plot of {x_col} vs {y_col}')
         st.pyplot(fig)  
     
     if len(numeric_columns) >= 2:
@@ -148,12 +167,15 @@ if uploaded_file is not None:
         corr = number_df.dropna(subset=[heat_col]).corr(method=meth)
         corr2 = corr[corr > thresh]
         sns.heatmap(corr2)
-        st.write('##### ***Features and Correlation Values***',)
+        st.write('#### ***Features and Correlation Values***',)
         filter_corr2 = corr2[heat_col].sort_values(ascending=False)
         st.dataframe(filter_corr2[filter_corr2 >= thresh])
+        st.write(f'##### Heatmap of {heat_col}')
         st.pyplot(fig)
 else: 
     st.warning("Please upload a CSV file to proceed.")
 
+    
+    
     #zscore
     # account for instances where there may not be a condition in the data set to satisfy the code
